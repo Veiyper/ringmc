@@ -4,6 +4,7 @@ from flask import redirect, request, render_template, make_response, url_for
 from . import index
 
 from ..models.articles import Article
+from ..models.builds import Build
 from ..extensions import db
 
 @index.route('/', methods=['GET', 'POST'])
@@ -11,7 +12,10 @@ def home():
     articles = db.session.execute(
         db.select(Article).order_by(Article.id.desc()).limit(3)
     ).scalars().all()
-    return render_template('index.html', articles=articles)
+    builds = db.session.execute(
+        db.select(Build).order_by(Build.id.desc()).limit(3)
+    ).scalars().all()
+    return render_template('index.html', articles=articles, builds=builds)
 
 @index.route('/login', methods=['POST'])
 def login():

@@ -155,6 +155,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const openModalButtons = document.querySelectorAll('.open-modal');
     const actionButtons = document.querySelectorAll('.btn-action');
     const sortForm = document.querySelector('.sort-form');
+    const showPasswordBtn = document.querySelector('.show-password');
+
+    if (showPasswordBtn) {
+        const passwordInput = showPasswordBtn.previousElementSibling;
+        showPasswordBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordBtn.innerHTML = '<i class="nf nf-fa-eye_slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordBtn.innerHTML = '<i class="nf nf-fa-eye"></i>';
+            }
+        });
+    }
 
     const addPriceBtn = document.getElementById('add-price-btn');
     const pricesList = document.querySelector('.prices');
@@ -187,7 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    form.addEventListener('submit', postArticle);
+    if (form) {
+        form.addEventListener('submit', postArticle);
+    }
 
     actionButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -242,12 +259,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    sortForm.addEventListener('change', () => {
-        const category = sortForm.elements['category'].value;
-        const order = sortForm.elements['sort'].value;
-        const params = new URLSearchParams(window.location.search);
-        params.set('category', category);
-        params.set('sort', order);
-        window.location.search = params.toString();
-    });
+    if (sortForm) {
+        sortForm.addEventListener('change', () => {
+            const category = sortForm.elements['category'].value;
+            const order = sortForm.elements['sort'].value;
+            const params = new URLSearchParams(window.location.search);
+            params.set('category', category);
+            params.set('sort', order);
+            window.location.search = params.toString();
+        });
+    };
 });

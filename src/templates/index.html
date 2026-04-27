@@ -9,7 +9,6 @@
         {% if articles %}
             <div class="articles-list">
                 {% for article in articles %}
-                    {% set first_price = article.prices[0] if article.prices else None %}
                     <div class="article-card">
                             {% if article.image_url %}
                             <div class="article-image">
@@ -53,5 +52,35 @@
     </section>
     <section class="container mh bg-normal">
         <h2>Derniers builds</h2>
+        {% if builds %}
+            <div class="builds-list">
+                {% for build in builds %}
+                    <div class="build-card">
+                        {% if build.images %}
+                            <div class="build-image-container">
+                                <img src="{{ url_for('static', filename='uploads/builds/' ~ build.images[0]) }}" alt="Image de {{ build.title }}" class="build-image">
+                            </div>
+                        {% endif %}
+                        <div class="build-content">
+                            <h3 class="build-title">{{ build.name }}</h3>
+                            <div>
+                                <div>Auteur : <span class="build-author">{{ build.author }}</span></div>
+                            </div>
+                            <div class="build-description">
+                                <p>{{ build.description }}</p>
+                            </div>
+                        </div>
+                        <div class="build-card-footer-row">
+                            <a href="{{ url_for('builds.build_detail', build_id=build.id) }}" class="btn btn-primary">Voir le build</a>
+                            {% if g.is_admin %}
+                                <a class="btn btn-danger btn-action" data-action="delete-build" data-id="{{ build.id }}"><i class="nf nf-fa-trash_o"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun build disponible pour le moment.</p>
+        {% endif %}
     </section>
 {% endblock %}

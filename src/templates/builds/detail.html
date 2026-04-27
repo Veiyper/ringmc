@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <section class="container mh bg-elevated">
+    <section class="container mh bg-elevated build-details">
         <h1>{{ build.name }}</h1>
+        <div class="build-content-details-p-container">
+            <p>{{ build.description }}</p>
+        </div>
         {% if build.images %}
             <div class="build-images">
                 {% for image in build.images %}
@@ -10,6 +13,5 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <p class="build-content">{{ build.description }}</p>
     </section>
 {% endblock %}

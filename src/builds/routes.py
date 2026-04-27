@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, jsonify, current_app
+from flask import render_template, request, jsonify, current_app, g
 from werkzeug.utils import secure_filename
 from pydantic import ValidationError
 
@@ -10,8 +10,15 @@ from ..extensions import db
 
 @builds.route('/', methods=['GET'])
 def builds_index():
-    builds = db.session.execute(db.select(Build)).scalars().all()
-    return render_template('builds/index.html', builds=builds)
+    sort = request.args.get('sort', 'desc')
+    category = request.args.get('category', None)
+    if sort not in ['asc', 'desc']:
+        sort = 'desc'
+
+    builds = db.session.execute(
+        db.select(Build).order_by(Build.id.asc() if sort == 'asc' else Build.id.desc())
+    ).scalars().all()
+    return render_template('builds/index.html', builds=builds, sort=sort, category=category)
 
 @builds.route('/create', methods=['POST'])
 def create_build():
@@ -53,3 +60,14 @@ def build_detail(build_id):
     if not build:
         return "Build not found", 404
     return render_template('builds/detail.html', build=build)
+
+@builds.route('/<int:build_id>', methods=['DELETE'])
+def delete_build(build_id):
+    if not g.is_admin:
+        return {"error": "Unauthorized"}, 403
+    build = db.session.get(Build, build_id)
+    if not build:
+        return "Build not found", 404
+    db.session.delete(build)
+    db.session.commit()
+    return {"message": "Build deleted"}, 200

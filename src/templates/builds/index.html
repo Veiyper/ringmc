@@ -3,27 +3,36 @@
 {% block content %}
     <section class="container mh bg-elevated">
         <h1>Derniers builds</h1>
+        <form class="sort-form">
+            <select name="sort">
+                <option value="asc" {% if sort == 'asc' %}selected{% endif %}>Plus récents</option>
+                <option value="desc" {% if sort == 'desc' %}selected{% endif %}>Plus anciens</option>
+            </select>
+        </form>
         {% if builds %}
             <div class="builds-list">
                 {% for build in builds %}
                     <div class="build-card">
-                        {% if build.image_url %}
+                        {% if build.images %}
                             <div class="build-image-container">
-                                <img src="{{ build.image_url }}" alt="Image de {{ build.title }}" class="build-image">
+                                <img src="{{ url_for('static', filename='uploads/builds/' ~ build.images[0]) }}" alt="Image de {{ build.title }}" class="build-image">
                             </div>
                         {% endif %}
                         <div class="build-content">
                             <h3 class="build-title">{{ build.name }}</h3>
                             <div>
-                                <p class="build-content-p">{{ build.content }}</p>
-                                <div class="build-prices">
-                                    {% for price in build.prices %}
-                                        <p>{{ price.item }} x{{ price.value }}</p>
-                                    {% endfor %}
-                                </div>
+                                <div>Auteur : <span class="build-author">{{ build.author }}</span></div>
+                            </div>
+                            <div class="build-description">
+                                <p>{{ build.description }}</p>
                             </div>
                         </div>
-                        <a href="{{ url_for('builds.build_detail', build_id=build.id) }}" class="btn btn-primary">Voir le build</a>
+                        <div class="build-card-footer-row">
+                            <a href="{{ url_for('builds.build_detail', build_id=build.id) }}" class="btn btn-primary">Voir le build</a>
+                            {% if g.is_admin %}
+                                <a class="btn btn-danger btn-action" data-action="delete-build" data-id="{{ build.id }}"><i class="nf nf-fa-trash_o"></i></a>
+                            {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
