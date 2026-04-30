@@ -5,15 +5,17 @@
         <h1>Derniers articles en vente</h1>
         <form class="sort-form">
             <select name="sort">
-                <option value="asc" {% if sort == 'asc' %}selected{% endif %}>Plus récents</option>
-                <option value="desc" {% if sort == 'desc' %}selected{% endif %}>Plus anciens</option>
+                <option value="desc" {% if sort == 'desc' %}selected{% endif %}>Plus récents</option>
+                <option value="asc" {% if sort == 'asc' %}selected{% endif %}>Plus anciens</option>
             </select>
             <select name="category">
                 <option value="" {% if not category %}selected{% endif %}>Toutes les catégories</option>
                 <option value="Service" {% if category == 'Service' %}selected{% endif %}>Service</option>
                 <option value="Item" {% if category == 'Item' %}selected{% endif %}>Item</option>
                 <option value="Autre" {% if category == 'Autre' %}selected{% endif %}>Autre</option>
-             </select>
+            </select>
+            <input type="text" name="author" placeholder="Filtrer par auteur" value="{{ author or '' }}">
+            <button type="submit" class="btn">Trier</button>
         </form>
         {% if articles %}
             <div class="articles-list">

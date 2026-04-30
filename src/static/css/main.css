@@ -132,6 +132,10 @@ h1 {
     font-weight: bold;
 }
 
+h2 {
+    font-size: 2rem;
+}
+
 a {
     color: var(--color-secondary);
     text-decoration: none;
@@ -221,6 +225,7 @@ main {
 
 .navbar-brand a:hover {
     text-decoration: none;
+
 }
 
 .navbar-menu {
@@ -233,7 +238,9 @@ main {
 }
 
 .navbar-menu li {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     overflow: visible;
     transform: scale(1);
     transform-origin: center;
@@ -255,6 +262,34 @@ main {
     transform: scale(1.05);
 }
 
+.house {
+    padding: 0.3rem;
+    border-radius: 0.25rem;
+    background-color: var(--color-secondary);
+    visibility: hidden;
+    opacity: 0;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.25s ease-in-out;
+    position: relative;
+}
+
+.house::after {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid var(--color-secondary);
+}
+
+.navbar-brand:hover .house {
+    visibility: visible;
+    opacity: 1;
+}
+
 /* Footer */
 .footer {
     display: flex;
@@ -264,6 +299,7 @@ main {
     color: var(--color-white);
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 /* Article Form */
@@ -359,10 +395,40 @@ main {
     width: 2.5rem;
 }
 
-.article-form input[type="text"],
-.article-form input[type="number"],
+.sort-form .btn {
+    height: 2rem;
+}
+
+.article-form input[type="file"]::file-selector-button {
+    --btn-color: var(--color-white);
+    --btn-bg: var(--color-primary);
+    --btn-hover-bg: var(--color-primary-700);
+    --btn-active-bg: var(--color-primary-800);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem .5rem;
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: var(--font-normal);
+    text-decoration: none;
+    transition: background-color 0.25s ease-in-out;
+}
+
+.article-form input[type="file"]::file-selector-button:hover {
+    background-color: var(--btn-hover-bg);
+    text-decoration: none;
+}
+
 .article-form select,
+.article-form input,
 .form input,
+.sort-form input,
 .article-form textarea {
     width: 100%;
     padding: 0.5rem;
@@ -374,10 +440,10 @@ main {
     transition: border-color 0.25s ease-in-out;
 }
 
-.article-form input[type="text"]:focus,
-.article-form input[type="number"]:focus,
+.article-form input:focus,
 .article-form select:focus,
-.form input,
+.form input:focus,
+.sort-form input:focus,
 .article-form textarea:focus {
     border-color: var(--color-primary);
 }
@@ -410,6 +476,10 @@ main {
     display: flex;
     gap: 1rem;
     align-items: center;
+}
+
+.sort-form * {
+    height: 2rem;
 }
 
 .sort-form select {
@@ -514,6 +584,37 @@ select::picker(select) {
     cursor: not-allowed;
 }
 
+.tooltip-wrapper {
+    position: relative;
+    pointer-events: auto; 
+}
+
+.tooltip-wrapper::after {
+    content: attr(data-tooltip); 
+    position: absolute;
+    bottom: -110%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    background-color: #333;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 1000;
+}
+
+.tooltip-wrapper:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+
 /* Article Card */
 
 .articles-list {
@@ -529,7 +630,6 @@ select::picker(select) {
     background-color: var(--color-elevated);
     border-radius: .75rem;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     min-height: 100%;
@@ -738,7 +838,6 @@ select::picker(select) {
     background-color: var(--color-elevated);
     border-radius: 0.75rem;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     min-height: 100%;
@@ -894,4 +993,63 @@ select::picker(select) {
         width: 100%;
         min-height: auto;
     }
+}
+
+/* Minecraft Block Button (troll) */
+
+.block-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    position: absolute;
+    background-color: transparent;
+    bottom: 50%;
+    right: .75rem;
+    transform: translateY(50%);
+}
+
+.block-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    image-rendering: pixelated;
+    transition: opacity .4s ease-in-out;
+}
+
+.block-button .off {
+    opacity: 1;
+    z-index: 10;
+}
+
+.block-button .on {
+    opacity: 0;
+    z-index: 20;
+}
+
+.block-button:hover .on {
+    opacity: 1;
+}
+
+#rickroll {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    width: 80vw;
+    height: auto;
+    visibility: hidden;
+}
+
+#rickroll.active {
+    visibility: visible;
 }

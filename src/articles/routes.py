@@ -23,21 +23,25 @@ def articles_index():
 
     sort = request.args.get('sort', 'desc')
     category = request.args.get('category', None)
+    author = request.args.get('author', None)
+
     if sort not in ['asc', 'desc']:
         sort = 'desc'
     if category not in [None, 'Service', 'Item', 'Autre']:
         category = None
 
     articles = None
+    query = db.select(Article)
     if category:
-        articles = db.session.execute(
-            db.select(Article).where(Article.category == category).order_by(Article.id.asc() if sort == 'asc' else Article.id.desc())
-        ).scalars().all()
+        query = query.where(Article.category == category)
+    if author:
+        query = query.where(Article.author == author)
+    if sort == 'asc':
+        query = query.order_by(Article.id.asc())
     else:
-        articles = db.session.execute(
-            db.select(Article).order_by(Article.id.asc() if sort == 'asc' else Article.id.desc())
-        ).scalars().all()
-    return render_template('articles/index.html', articles=articles, sort=sort, category=category)
+        query = query.order_by(Article.id.desc())
+    articles = db.session.execute(query).scalars().all()
+    return render_template('articles/index.html', articles=articles, sort=sort, category=category, author=author)
 
 @articles.route('/<int:article_id>')
 def article_detail(article_id):

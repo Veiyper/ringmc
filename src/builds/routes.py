@@ -11,14 +11,19 @@ from ..extensions import db
 @builds.route('/', methods=['GET'])
 def builds_index():
     sort = request.args.get('sort', 'desc')
-    category = request.args.get('category', None)
+    author = request.args.get('author', None)
     if sort not in ['asc', 'desc']:
         sort = 'desc'
 
-    builds = db.session.execute(
-        db.select(Build).order_by(Build.id.asc() if sort == 'asc' else Build.id.desc())
-    ).scalars().all()
-    return render_template('builds/index.html', builds=builds, sort=sort, category=category)
+    if author:
+        builds = db.session.execute(
+            db.select(Build).where(Build.author == author).order_by(Build.id.asc() if sort == 'asc' else Build.id.desc())
+        ).scalars().all()
+    else:
+        builds = db.session.execute(
+            db.select(Build).order_by(Build.id.asc() if sort == 'asc' else Build.id.desc())
+        ).scalars().all()
+    return render_template('builds/index.html', builds=builds, sort=sort, author=author)
 
 @builds.route('/create', methods=['POST'])
 def create_build():

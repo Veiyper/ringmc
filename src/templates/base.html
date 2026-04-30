@@ -11,13 +11,14 @@
     <nav class="navbar">
         <div class="navbar-brand">
             <a href="{{ url_for('index.home') }}">RingMC</a>
+            <i class="nf nf-fa-house house"></i>
         </div>
         <ul class="navbar-menu">
             <li><a href="{{ url_for('index.home') }}">Accueil</a></li>
             <li><a href="{{ url_for('articles.articles_index') }}">Articles</a></li>
             <li><a href="{{ url_for('builds.builds_index') }}">Builds</a></li>
             {% if logged_in %}
-            <li><a href="{{ url_for('index.logout') }}">Déconnexion</a></li>
+            <li><a class="logout btn btn-danger btn-sm" href="{{ url_for('index.logout') }}">Déconnexion</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -26,11 +27,19 @@
     </main>
     <footer class="footer">
         <p>Fait avec amour par Owen, Adam et Kayle. Projet <a href="https://github.com/TheDogHusky/RingMC" target="_blank">Open Source</a></p>
+        <button class=" block-button">
+            <img src="{{ url_for('static', filename='images/lamp_on.jpg') }}" class="on">
+            <img src="{{ url_for('static', filename='images/lamp_off.jpg') }}" class="off">
+        </button>
     </footer>
 
     <div class="modals">
         {% include 'components/article_form.html' %}
         {% include 'components/build_form.html' %}
     </div>
+
+    <video loading="lazy" id="rickroll">
+        <source src="{{ url_for('static', filename='videos/rickroll.webm') }}" type="video/webm" />
+    </video>
 </body>
 </html>

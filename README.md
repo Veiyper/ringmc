@@ -1,3 +1,4 @@
 # hELLO
 
-mimi
+pip install -r requirements.txt
+python main.py

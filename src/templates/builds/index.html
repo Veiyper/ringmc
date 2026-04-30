@@ -5,9 +5,11 @@
         <h1>Derniers builds</h1>
         <form class="sort-form">
             <select name="sort">
-                <option value="asc" {% if sort == 'asc' %}selected{% endif %}>Plus récents</option>
-                <option value="desc" {% if sort == 'desc' %}selected{% endif %}>Plus anciens</option>
+                <option value="desc" {% if sort == 'desc' %}selected{% endif %}>Plus récents</option>
+                <option value="asc" {% if sort == 'asc' %}selected{% endif %}>Plus anciens</option>
             </select>
+            <input type="text" name="author" placeholder="Filtrer par auteur" value="{{ author or '' }}">
+            <button type="submit" class="btn">Trier</button>
         </form>
         {% if builds %}
             <div class="builds-list">
@@ -30,7 +32,7 @@
                         <div class="build-card-footer-row">
                             <a href="{{ url_for('builds.build_detail', build_id=build.id) }}" class="btn btn-primary">Voir le build</a>
                             {% if g.is_admin %}
-                                <a class="btn btn-danger btn-action" data-action="delete-build" data-id="{{ build.id }}"><i class="nf nf-fa-trash_o"></i></a>
+                                <a class="btn btn-danger btn-action tooltip-wrapper" data-action="delete-build" data-id="{{ build.id }}" data-tooltip="Supprimer le build"><i class="nf nf-fa-trash_o"></i></a>
                             {% endif %}
                         </div>
                     </div>

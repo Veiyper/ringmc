@@ -154,8 +154,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('article-form');
     const openModalButtons = document.querySelectorAll('.open-modal');
     const actionButtons = document.querySelectorAll('.btn-action');
-    const sortForm = document.querySelector('.sort-form');
     const showPasswordBtn = document.querySelector('.show-password');
+    const rickrollButton = document.querySelector('.block-button');
+    const rickrollVideo = document.getElementById('rickroll');
+    let playing = false;
+
+    if (rickrollButton && rickrollVideo) {
+        rickrollVideo.addEventListener('ended', () => {
+            rickrollVideo.classList.remove('active');
+            playing = false;
+            rickrollVideo.currentTime = 0;
+            rickrollVideo.pause();
+        });
+
+        rickrollVideo.addEventListener('click', (event) => {
+            event.preventDefault();
+        });
+
+        rickrollVideo.addEventListener('pause', (event) => {
+            if (playing) {
+                event.preventDefault();
+                rickrollVideo.currentTime = 0;
+                rickrollVideo.play();
+                playing = true;
+            }
+        });
+
+        rickrollVideo.addEventListener('keypress', (event) => {
+            event.preventDefault();
+        });
+
+        rickrollButton.addEventListener('click', () => {
+            rickrollVideo.classList.add('active');
+            rickrollVideo.currentTime = 0;
+            rickrollVideo.play();
+            playing = true;
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (playing) event.preventDefault();
+    });
+    document.querySelectorAll('a, button').forEach(link => {
+        link.addEventListener('click', (event) => {
+            if (playing) event.preventDefault();
+        });
+    });
 
     if (showPasswordBtn) {
         const passwordInput = showPasswordBtn.previousElementSibling;
@@ -258,15 +302,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    if (sortForm) {
-        sortForm.addEventListener('change', () => {
-            const category = sortForm.elements['category'].value;
-            const order = sortForm.elements['sort'].value;
-            const params = new URLSearchParams(window.location.search);
-            params.set('category', category);
-            params.set('sort', order);
-            window.location.search = params.toString();
-        });
-    };
 });
